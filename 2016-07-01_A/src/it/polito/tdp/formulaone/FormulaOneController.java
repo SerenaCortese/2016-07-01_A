@@ -3,7 +3,9 @@ package it.polito.tdp.formulaone;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.formulaone.model.Driver;
 import it.polito.tdp.formulaone.model.Model;
+import it.polito.tdp.formulaone.model.Season;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -21,7 +23,7 @@ public class FormulaOneController {
     private URL location;
 
     @FXML
-    private ComboBox<?> boxAnno;
+    private ComboBox<Season> boxAnno;
 
     @FXML
     private TextField textInputK;
@@ -31,6 +33,22 @@ public class FormulaOneController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	try {
+    		Season s = boxAnno.getValue();
+    		
+    		if(s == null) {
+    			txtResult.setText("Selezionare una stagione");
+    			return;
+    		}
+    		
+    		model.creaGrafo(s);
+    		Driver d = model.getBestDriver();
+    		txtResult.setText(d.toString());
+    		
+    	}catch(RuntimeException e) {
+    		e.printStackTrace();//per vedere quale eccezione compare(così la stampa)
+    		txtResult.setText("Errore di connessione al DB");//e' l'unica runtimeException
+    	}
 
     }
 
@@ -49,5 +67,6 @@ public class FormulaOneController {
     
     public void setModel(Model model){
     	this.model = model;
+    	boxAnno.getItems().addAll(model.getAllSeasons());
     }
 }
