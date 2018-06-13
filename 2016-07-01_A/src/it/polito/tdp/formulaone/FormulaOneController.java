@@ -1,6 +1,7 @@
 package it.polito.tdp.formulaone;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.formulaone.model.Driver;
@@ -54,7 +55,22 @@ public class FormulaOneController {
 
     @FXML
     void doTrovaDreamTeam(ActionEvent event) {
-
+    	try {
+    		try {
+    			int k = Integer.parseInt(textInputK.getText());
+    			if(k<=0) {
+    				txtResult.setText("Inserire K > 0 ");
+    			}
+    			List<Driver> drivers = model.getDreamTeam(k);
+    			txtResult.setText(drivers.toString());
+    		}catch(NumberFormatException ne) {
+    			
+    		}
+    		
+    	}catch(RuntimeException e) {
+    		e.printStackTrace();//per vedere quale eccezione compare(così la stampa)
+    		txtResult.setText("Errore di connessione al DB");//e' l'unica runtimeException
+    	}
     }
 
     @FXML
